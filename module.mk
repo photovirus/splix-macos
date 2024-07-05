@@ -36,6 +36,11 @@ rastertoqpdl_LIBS	:= `pkg-config --libs cups` -lcupsimage
 pstoqpdl_LDFLAGS	:= $(LDFLAGS)
 pstoqpdl_LIBS		:= `pkg-config --libs cups` -lcupsimage
 
+ifeq ($(ARCHI),Darwin)
+CXXFLAGS		+= -I`brew --prefix`/include
+rastertoqpdl_LDFLAGS += -L`brew --prefix`/lib
+pstoqpdl_LDFLAGS	+= -L`brew --prefix`/lib
+endif
 
 # Update compilation flags with defined options
 ifneq ($(DISABLE_THREADS),0)
@@ -56,9 +61,13 @@ endif
 
 
 # Get some information
-CUPSFILTER		:= `pkg-config --variable=cups_serverbin cups`/filter
-CUPSPPD			?= `pkg-config --variable=cups_datadir cups`/model
-CUPSDRV			?= `pkg-config --variable=cups_datadir cups`/drv
+CUPSFILTER		:= `cups-config --serverbin`/filter
+ifeq ($(ARCHI),Darwin)
+CUPSPPD			:= /Library/Printers/PPDs/Contents/Resources
+else
+CUPSPPD			?= `cups-config --datadir`/model
+endif
+CUPSDRV			?= `cups-config --datadir`/drv
 ifeq ($(ARCHI),Darwin)
 PSTORASTER		:= pstocupsraster
 else
