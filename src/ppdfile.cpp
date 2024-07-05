@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  *  $Id$
- * 
+ *
  */
 #include "ppdfile.h"
 #include <cups/cups.h>
@@ -74,7 +74,7 @@ bool PPDFile::open(const char *file, const char *version, const char *useropts)
 
     // Check if the PPD version is compatible with this filter
     fileVersion = get("FileVersion");
-    if (!fileVersion) { 
+    if (!fileVersion) {
         ERRORMSG(_("No FileVersion found in the PPD file: invalid "
             "PPD file"));
         ppdClose(_ppd);
@@ -255,8 +255,8 @@ bool PPDFile::Value::isTrue() const
 {
     if (!_out)
         return false;
-    if (!strcmp(_out, "1") || !strcasecmp(_out, "true") || 
-        !strcasecmp(_out, "enable") || !strcasecmp(_out, "enabled") || 
+    if (!strcmp(_out, "1") || !strcasecmp(_out, "true") ||
+        !strcasecmp(_out, "enable") || !strcasecmp(_out, "enabled") ||
         !strcasecmp(_out, "yes") || !strcasecmp(_out, "on"))
         return true;
     return false;

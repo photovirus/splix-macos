@@ -24,7 +24,7 @@ TOSHIBA		:= es180s
 DRIVERSEXT	:= ppd
 POEXT		:= po
 PODIR		:= po
-LANGUAGES 	:= fr pt
+LANGUAGES 	:=
 # === MAKE ALL PPD BY DEFAULT ====
 ifneq ($(DISABLE_JBIG),1)
 SAMSUNG 	+= clp200 clp300 clp310 clp315 clp310n clp600 clx216x clx2170 \
@@ -109,43 +109,43 @@ cmd_install_drv		= INSTALL           DRV files
 install:
 ifneq  ($(DRV_ONLY),1)
 	$(call printCmd, $(cmd_install_samsung))
-	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}/samsung
+	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${SAMSUNG}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/samsung;\
+		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/samsung;\
+			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_xerox))
-	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}/xerox
+	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${XEROX}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/xerox;\
+		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/xerox;\
+			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_dell))
-	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}/dell
+	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${DELL}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/dell;\
+		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/dell;\
+			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_lexmark))
-	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}/lexmark
+	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${LEXMARK}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/lexmark;\
+		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/lexmark;\
+			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_toshiba))
-	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}/toshiba
+	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${TOSHIBA}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/toshiba;\
+		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/toshiba;\
+			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
 		done; \
 	done;
 else
