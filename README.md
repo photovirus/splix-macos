@@ -1,8 +1,11 @@
 # A fork which works on modern macOS
 
-This fork is basically @janrueth's [patch](https://github.com/janrueth/splix-2.0.0-macos) applied to latest Splix release.
+This fork is basically @janrueth's [patch](https://github.com/janrueth/splix-2.0.0-macos) applied to latest Splix release available at the time (2.0.1).
 
-Tested on: M1 Macbook Pro, macOS Sonoma 14.5, and a Samsung ML-2010.
+Tested on: 
+
+* M1 Macbook Pro, macOS Sonoma 14.5, and a Samsung ML-2010,
+* M3 Pro Macbook Pro, macOS Sequoia 15.3, and the same Samsung ML-2010.
 
 ## Installation
 
