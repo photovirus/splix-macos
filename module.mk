@@ -27,19 +27,41 @@ DISABLE_BLACKOPTIM	?= 0
 DRV_ONLY		?= 0
 
 
+# CUPS
+# On macOS CUPS ships with the system: the headers and the linker stubs live
+# in the SDK and /usr/bin/cups-config resolves them without any extra
+# environment. pkg-config is useless here (cups is keg-only in Homebrew) and it
+# breaks `sudo make install`, because sudo resets PKG_CONFIG_PATH and the link
+# line is then built without -lcups.
+ifeq ($(ARCHI),Darwin)
+CUPS_CONFIG		?= /usr/bin/cups-config
+CUPS_CFLAGS		:= `$(CUPS_CONFIG) --cflags`
+CUPS_LIBS		:= `$(CUPS_CONFIG) --libs`
+CUPS_DATADIR		:= `$(CUPS_CONFIG) --datadir`
+else
+CUPS_CFLAGS		:= `pkg-config --cflags cups`
+CUPS_LIBS		:= `pkg-config --libs cups`
+CUPS_DATADIR		:= `pkg-config --variable=cups_datadir cups`
+endif
+
+
 # Flags
-CXXFLAGS		+= `pkg-config --cflags cups` -Iinclude -Wall -I/opt/local/include
+CXXFLAGS		+= $(CUPS_CFLAGS) -Iinclude -Wall -I/opt/local/include
 DEBUG_CXXFLAGS		+= -DDEBUG  -DDUMP_CACHE
 OPTIM_CXXFLAGS 		+= -g
 rastertoqpdl_LDFLAGS	:= $(LDFLAGS) -L/opt/local/lib
-rastertoqpdl_LIBS	:= `pkg-config --libs cups` -lcupsimage
+rastertoqpdl_LIBS	:= $(CUPS_LIBS) -lcupsimage
 pstoqpdl_LDFLAGS	:= $(LDFLAGS)
-pstoqpdl_LIBS		:= `pkg-config --libs cups` -lcupsimage
+pstoqpdl_LIBS		:= $(CUPS_LIBS) -lcupsimage
 
 ifeq ($(ARCHI),Darwin)
-CXXFLAGS		+= -I`brew --prefix`/include
-rastertoqpdl_LDFLAGS += -L`brew --prefix`/lib
-pstoqpdl_LDFLAGS	+= -L`brew --prefix`/lib
+# Homebrew prefix (needed for jbig85) is derived from the disk instead of
+# running `brew --prefix`, which fails for root: sudo drops $HOME and PATH.
+BREW_PREFIX		?= $(patsubst %/bin/brew,%,$(firstword $(wildcard \
+			   /opt/homebrew/bin/brew /usr/local/bin/brew)))
+CXXFLAGS		+= $(if $(BREW_PREFIX),-I$(BREW_PREFIX)/include)
+rastertoqpdl_LDFLAGS	+= $(if $(BREW_PREFIX),-L$(BREW_PREFIX)/lib)
+pstoqpdl_LDFLAGS	+= $(if $(BREW_PREFIX),-L$(BREW_PREFIX)/lib)
 endif
 
 # Update compilation flags with defined options
@@ -61,20 +83,20 @@ endif
 
 
 # Get some information
-CUPSFILTER		:= `cups-config --serverbin`/filter
+CUPSFILTER		:= `$(CUPS_CONFIG) --serverbin`/filter
 ifeq ($(ARCHI),Darwin)
 CUPSPPD			:= /Library/Printers/PPDs/Contents/Resources
 else
-CUPSPPD			?= `cups-config --datadir`/model
+CUPSPPD			?= `$(CUPS_CONFIG) --datadir`/model
 endif
-CUPSDRV			?= `cups-config --datadir`/drv
+CUPSDRV			?= `$(CUPS_CONFIG) --datadir`/drv
 ifeq ($(ARCHI),Darwin)
 PSTORASTER		:= pstocupsraster
 else
 PSTORASTER		:= pstoraster
 endif
 GSTORASTER		:= gstoraster
-CUPSPROFILE			:= `pkg-config --variable=cups_datadir cups`/profiles
+CUPSPROFILE		:= $(CUPS_DATADIR)/profiles
 export CUPSFILTER CUPSPPD CUPSDRV
 
 

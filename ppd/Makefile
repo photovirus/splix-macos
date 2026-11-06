@@ -108,6 +108,13 @@ update: $(patsubst %, $(PODIR)/%.$(POEXT), $(LANGUAGES))
 	./compile.sh toshiba.drv.in lang $@
 	./compile.sh hp.drv.in lang $@
 
+# Translations are shipped under the short suffix (clp315pt.ppd) while the PO
+# locale is pt_BR (po/pt_BR.po), so accept both spellings and skip PPDs that
+# have not been generated for a given printer.
+LANGSUFFIXES	:= $(foreach lang,${LANGUAGES},$(lang) $(firstword $(subst _, ,$(lang))))
+PPDS		:= $${filename}.$(DRIVERSEXT) \
+		   $(foreach suffix,${LANGSUFFIXES},$${filename}$(suffix).$(DRIVERSEXT))
+
 cmd_install_samsung	= INSTALL           Samsung PPD files
 cmd_install_xerox	= INSTALL           Xerox PPD files
 cmd_install_dell	= INSTALL           Dell PPD files
@@ -121,49 +128,55 @@ ifneq  ($(DRV_ONLY),1)
 	$(call printCmd, $(cmd_install_samsung))
 	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${SAMSUNG}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
-		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
+		for ppd in ${PPDS}; do \
+			if [ -f "$$ppd" ]; then \
+				install -m 644 "$$ppd" ${DESTDIR}${CUPSPPD}; \
+			fi; \
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_xerox))
 	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${XEROX}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
-		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
+		for ppd in ${PPDS}; do \
+			if [ -f "$$ppd" ]; then \
+				install -m 644 "$$ppd" ${DESTDIR}${CUPSPPD}; \
+			fi; \
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_dell))
 	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${DELL}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
-		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
+		for ppd in ${PPDS}; do \
+			if [ -f "$$ppd" ]; then \
+				install -m 644 "$$ppd" ${DESTDIR}${CUPSPPD}; \
+			fi; \
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_lexmark))
 	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${LEXMARK}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
-		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
+		for ppd in ${PPDS}; do \
+			if [ -f "$$ppd" ]; then \
+				install -m 644 "$$ppd" ${DESTDIR}${CUPSPPD}; \
+			fi; \
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_toshiba))
 	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}
 	$(Q)for filename in ${TOSHIBA}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
-		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD};\
+		for ppd in ${PPDS}; do \
+			if [ -f "$$ppd" ]; then \
+				install -m 644 "$$ppd" ${DESTDIR}${CUPSPPD}; \
+			fi; \
 		done; \
 	done;
 	$(call printCmd, $(cmd_install_hp))
 	$(Q)install -d -m 755 ${DESTDIR}${CUPSPPD}/hp
 	$(Q)for filename in ${HP}; do \
-		install -m 644 $$filename.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/hp;\
-		for lang in ${LANGUAGES}; do \
-			install -m 644 $$filename$$lang.${DRIVERSEXT} ${DESTDIR}${CUPSPPD}/hp;\
+		for ppd in ${PPDS}; do \
+			if [ -f "$$ppd" ]; then \
+				install -m 644 "$$ppd" ${DESTDIR}${CUPSPPD}/hp; \
+			fi; \
 		done; \
 	done;
 else
